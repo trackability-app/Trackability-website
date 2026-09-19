@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0b10" />
+  <meta name="description" content="Trackability — a personal progress platform for study, focus, tasks, tests and everyday tracking." />
+  <title>Trackability — Track your progress. Stay on track.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#08090d; --panel:#101219; --panel2:#141722; --text:#f5f7fb; --muted:#a4a9b8;
+      --line:rgba(255,255,255,.09); --accent:#9b8cff; --accent2:#5ee7c2; --warm:#ffcc70;
+      --shadow:0 30px 90px rgba(0,0,0,.38); --radius:24px; --max:1180px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:
+      radial-gradient(circle at 80% 5%,rgba(155,140,255,.16),transparent 30%),
+      radial-gradient(circle at 15% 30%,rgba(94,231,194,.07),transparent 26%),
+      var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;line-height:1.55}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max);margin:auto;padding:0 24px}
+    .nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(calc(100% - 28px),1160px);z-index:20;
+      background:rgba(10,11,16,.72);border:1px solid var(--line);backdrop-filter:blur(18px);border-radius:18px;padding:10px 14px;
+      display:flex;align-items:center;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px;font-family:"Space Grotesk";font-weight:700}
+    .mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;box-shadow:0 8px 30px rgba(155,140,255,.28)}
+    .mark svg{width:20px}
+    .navlinks{display:flex;gap:22px;color:#c7cbd7;font-size:14px}
+    .navlinks a:hover{color:white}
+    .navcta{padding:10px 14px;border-radius:12px;background:#fff;color:#0a0b10;font-weight:700;font-size:14px}
+    .hero{min-height:100vh;display:grid;place-items:center;padding:150px 0 80px;overflow:hidden}
+    .heroGrid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;color:#c7c2ff;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 18px var(--accent2)}
+    h1,h2,h3{font-family:"Space Grotesk";line-height:1.05;margin:0}
+    h1{font-size:clamp(54px,7vw,88px);letter-spacing:-.055em;margin:18px 0}
+    h2{font-size:clamp(38px,5vw,64px);letter-spacing:-.045em}
+    .lead{font-size:19px;color:var(--muted);max-width:590px}
+    .buttons{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .btn{padding:14px 19px;border-radius:14px;border:1px solid var(--line);font-weight:700;display:inline-flex;gap:9px;align-items:center;transition:.2s transform,.2s background}
+    .btn:hover{transform:translateY(-2px)}
+    .btn.primary{background:#fff;color:#0a0b10}
+    .btn.secondary{background:rgba(255,255,255,.04)}
+    .heroNote{font-size:12px;color:#747b8d;margin-top:14px}
+    .deviceWrap{position:relative;display:flex;justify-content:center}
+    .glow{position:absolute;width:420px;height:420px;background:radial-gradient(circle,rgba(155,140,255,.28),transparent 68%);filter:blur(12px)}
+    .device{width:min(390px,86vw);border:8px solid #1c1f2a;border-radius:42px;background:#0d0f15;box-shadow:var(--shadow);position:relative;z-index:1;transform:rotate(2deg);overflow:hidden}
+    .notch{width:110px;height:23px;background:#08090d;border-radius:0 0 16px 16px;margin:auto}
+    .screen{padding:18px 17px 24px}
+    .miniTop{display:flex;justify-content:space-between;color:#8d94a6;font-size:11px}
+    .hello{margin:18px 0 4px;font-size:13px;color:#8d94a6}
+    .screen h3{font-size:25px}
+    .progress{margin-top:17px;padding:16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,rgba(155,140,255,.12),rgba(255,255,255,.025))}
+    .pbar{height:8px;background:#252936;border-radius:99px;overflow:hidden;margin-top:11px}
+    .pbar i{display:block;width:82%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    .stat{padding:14px;border:1px solid var(--line);border-radius:16px;background:#11141c}
+    .stat b{font:600 21px "JetBrains Mono";display:block}.stat span{font-size:11px;color:#858c9c}
+    .task{margin-top:10px;padding:13px;border:1px solid var(--line);border-radius:16px;background:#11141c;display:flex;justify-content:space-between;gap:12px}
+    .task b{font-size:13px}.task span{font-size:11px;color:#858c9c}
+    section{padding:120px 0}
+    .center{text-align:center}.center .lead{margin:18px auto 0}
+    .sectionTag{color:#8f95a7;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:16px}
+    .pillGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:46px}
+    .pill{padding:22px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025);transition:.25s}
+    .pill:hover{transform:translateY(-5px);background:rgba(255,255,255,.05)}
+    .pill .icon{font-size:23px;margin-bottom:14px}.pill b{display:block}.pill span{font-size:13px;color:var(--muted)}
+    .feature{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;margin-top:90px}
+    .feature.reverse .copy{order:2}.feature.reverse .visual{order:1}
+    .copy p{color:var(--muted);font-size:17px;max-width:510px}
+    .bullet{display:flex;gap:12px;margin-top:18px;color:#cbd0db}.check{color:var(--accent2);font-weight:700}
+    .panel{border:1px solid var(--line);background:linear-gradient(145deg,#12151e,#0c0e14);border-radius:28px;padding:24px;box-shadow:var(--shadow)}
+    .calendar{display:grid;grid-template-columns:60px 1fr;gap:8px}
+    .time{color:#646b7b;font:11px "JetBrains Mono";padding-top:13px}
+    .slot{min-height:64px;border:1px solid var(--line);border-radius:14px;padding:12px;background:#11141b;margin-bottom:8px}
+    .slot strong{display:block;font-size:13px}.slot small{color:#7e8697}
+    .timer{text-align:center;padding:55px 20px}.timerNum{font:600 clamp(48px,7vw,80px) "JetBrains Mono";letter-spacing:-.07em}.timerLabel{color:#8e95a7;font-size:12px;letter-spacing:.14em}
+    .chart{height:250px;display:flex;align-items:end;gap:10px;padding:20px 5px 5px}.bar{flex:1;border-radius:9px 9px 4px 4px;background:linear-gradient(180deg,var(--accent),rgba(155,140,255,.15));min-height:25px;animation:rise 1.2s ease both}
+    @keyframes rise{from{height:0!important;opacity:0}to{opacity:1}}
+    .test{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.score{font:600 35px "JetBrains Mono";margin-top:8px}.ring{width:150px;height:150px;border-radius:50%;margin:auto;background:conic-gradient(var(--accent2) 0 72%,#292d39 72% 100%);display:grid;place-items:center}.ring:after{content:"72%";width:110px;height:110px;border-radius:50%;background:#0f1219;display:grid;place-items:center;font:600 20px "JetBrains Mono"}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:46px}.step{padding:25px;border-top:1px solid var(--line)}.num{font:600 13px "JetBrains Mono";color:var(--accent2)}.step h3{font-size:22px;margin:14px 0 8px}.step p{color:var(--muted);font-size:14px}
+    .cta{padding:80px 30px;border:1px solid var(--line);border-radius:32px;background:radial-gradient(circle at 50% 0,rgba(155,140,255,.22),transparent 55%),#11131b;text-align:center}
+    .cta .buttons{justify-content:center}
+    .faq{max-width:850px;margin:42px auto 0}.faq details{border-top:1px solid var(--line);padding:20px 0}.faq details:last-child{border-bottom:1px solid var(--line)}summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between}summary::-webkit-details-marker{display:none}.faq p{color:var(--muted);max-width:720px}
+    footer{border-top:1px solid var(--line);padding:55px 0 30px}.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:35px}.foot h4{margin:0 0 12px;font-family:"Space Grotesk"}.foot a,.foot p{display:block;color:#8e95a6;font-size:14px;margin:8px 0}.socials{display:flex;gap:10px}.socials a{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;color:#c8cdd8}.copy{margin-top:45px;padding-top:22px;border-top:1px solid var(--line);color:#666d7c;font-size:12px;display:flex;justify-content:space-between;gap:20px}
+    .reveal{opacity:0;transform:translateY(24px);transition:.8s ease}.reveal.show{opacity:1;transform:none}
+    @media(max-width:900px){.heroGrid,.feature{grid-template-columns:1fr;gap:40px}.feature.reverse .copy,.feature.reverse .visual{order:initial}.pillGrid{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}.foot{grid-template-columns:1fr 1fr}.navlinks{display:none}}
+    @media(max-width:560px){.wrap{padding:0 17px}.nav{top:8px}.navcta{padding:9px 11px}.hero{padding-top:125px}.pillGrid,.steps,.test{grid-template-columns:1fr}.feature{margin-top:65px}.copy p{font-size:16px}.device{width:92vw}.cta{padding:55px 20px}.foot{grid-template-columns:1fr}.copy{display:block}.copy span{display:block;margin-top:8px}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="#top">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17V7m5 13V4m5 16V9" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></span>
+      TRACKABILITY
+    </a>
+    <div class="navlinks">
+      <a href="#features">Features</a><a href="#how">How it works</a><a href="#faq">FAQ</a><a href="#about">About</a>
+    </div>
+    <a class="navcta" href="#start">Get started</a>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap heroGrid">
+        <div class="reveal">
+          <div class="eyebrow"><span class="dot"></span> Personal progress, in one place</div>
+          <h1>Track your progress.<br><span style="color:#aaa2ff">Stay on track.</span></h1>
+          <p class="lead">Trackability brings study, focus, tasks, tests and everyday progress together — so you can see what you're doing, understand your momentum and keep moving.</p>
+          <div class="buttons">
+            <a class="btn primary" href="#start">Get Trackability →</a>
+            <a class="btn secondary" href="#features">Explore features ↓</a>
+          </div>
+          <div class="heroNote">Built for focused work, measurable progress and consistency.</div>
+        </div>
+        <div class="deviceWrap reveal">
+          <div class="glow"></div>
+          <div class="device">
+            <div class="notch"></div>
+            <div class="screen">
+              <div class="miniTop"><span>9:41</span><span>TRACKABILITY</span></div>
+              <div class="hello">GOOD MORNING</div>
+              <h3>Your day at a glance</h3>
+              <div class="progress"><span style="font-size:11px;color:#8c93a3">Today's progress</span><b style="float:right;font-size:12px">82%</b><div class="pbar"><i></i></div></div>
+              <div class="stats"><div class="stat"><b>04:18</b><span>Study hours</span></div><div class="stat"><b>124</b><span>MCQs</span></div></div>
+              <div class="task"><div><b>Pharmacology</b><span>Revision session</span></div><span>10:00</span></div>
+              <div class="task"><div><b>Focus session</b><span>Antibiotics</span></div><span>25:00</span></div>
+              <div class="task"><div><b>Test review</b><span>Yesterday's result</span></div><span>14:00</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap center reveal">
+        <div class="sectionTag">The bigger picture</div>
+        <h2>Your progress is more than a number.</h2>
+        <p class="lead">Track the parts of your routine that matter to you — and bring them into one connected picture.</p>
+        <div class="pillGrid">
+          <div class="pill"><div class="icon">📚</div><b>Study</b><span>Subjects, chapters & sessions</span></div>
+          <div class="pill"><div class="icon">⏱️</div><b>Focus</b><span>Timer, Pomodoro & history</span></div>
+          <div class="pill"><div class="icon">📝</div><b>MCQs</b><span>Questions, answers & progress</span></div>
+          <div class="pill"><div class="icon">🎯</div><b>Tests</b><span>Scores, results & trends</span></div>
+          <div class="pill"><div class="icon">📅</div><b>Tasks</b><span>Time blocks & daily plans</span></div>
+          <div class="pill"><div class="icon">🏋️</div><b>Fitness</b><span>Gym, weight & nutrition logs</span></div>
+          <div class="pill"><div class="icon">😴</div><b>Sleep</b><span>Daily recovery tracking</span></div>
+          <div class="pill"><div class="icon">📊</div><b>Statistics</b><span>History & visual progress</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="sectionTag reveal">Explore Trackability</div>
+        <h2 class="reveal">Designed around<br>the way you work.</h2>
+
+        <div class="feature">
+          <div class="copy reveal">
+            <div class="sectionTag">01 · Study</div>
+            <h2>Turn studying into something you can see.</h2>
+            <p>Organize subjects and chapters, record sessions and build a history of the work you actually put in.</p>
+            <div class="bullet"><span class="check">✓</span><span>Subject & chapter tracking</span></div>
+            <div class="bullet"><span class="check">✓</span><span>Study session history</span></div>
+            <div class="bullet"><span class="check">✓</span><span>Progress at a glance</span></div>
+          </div>
+          <div class="visual panel reveal">
+            <div style="display:flex;justify-content:space-between"><b>PHARMACOLOGY</b><span style="color:#7f8798">86%</span></div>
+            <div class="pbar" style="margin:16px 0 18px"><i style="width:86%"></i></div>
+            <div class="stats">
+              <div class="stat"><b>14:32</b><span>Total study time</span></div>
+              <div class="stat"><b>38</b><span>Sessions</span></div>
+            </div>
+            <div class="task"><div><b>Antibiotics</b><span>Completed</span></div><span>✓</span></div>
+            <div class="task"><div><b>CNS</b><span>In progress</span></div><span>72%</span></div>
+            <div class="task"><div><b>Endocrine</b><span>Next</span></div><span>64%</span></div>
+          </div>
+        </div>
+
+        <div class="feature reverse">
+          <div class="copy reveal">
+            <div class="sectionTag">02 · Focus</div>
+            <h2>Focus on the work. Let the clock handle itself.</h2>
+            <p>Start a focused session, connect it to what you're working on, and let every completed session become part of your history.</p>
+          </div>
+          <div class="visual panel reveal">
+            <div class="timer"><div class="timerLabel">FOCUS SESSION</div><div class="timerNum" id="timer">24:37</div><div style="color:#9a8fff">PHARMACOLOGY · ANTIBIOTICS</div></div>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="copy reveal">
+            <div class="sectionTag">03 · Tasks</div>
+            <h2>Know what's next.</h2>
+            <p>Plan your day with time-based tasks and keep your schedule connected to the work you want to get done.</p>
+          </div>
+          <div class="visual panel reveal">
+            <div class="calendar">
+              <div class="time">09:00</div><div class="slot"><strong>Pharmacology revision</strong><small>Study · 60 min</small></div>
+              <div class="time">10:30</div><div class="slot"><strong>MCQs</strong><small>120 questions</small></div>
+              <div class="time">12:00</div><div class="slot"><strong>Break</strong><small>30 min</small></div>
+              <div class="time">14:00</div><div class="slot"><strong>Pathology</strong><small>Focus session · 90 min</small></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature reverse">
+          <div class="copy reveal">
+            <div class="sectionTag">04 · Tests & MCQs</div>
+            <h2>Don't just solve questions. Track them.</h2>
+            <p>Record attempts, correct answers, wrong answers and remaining questions, then turn each test into useful history.</p>
+          </div>
+          <div class="visual panel reveal">
+            <div class="test">
+              <div><div style="color:#858c9c;font-size:12px">TEST #12</div><div class="score">270 / 400</div><div style="margin-top:20px">✓ 72 Correct</div><div>✕ 18 Wrong</div><div>○ 10 Left</div></div>
+              <div class="ring"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="copy reveal">
+            <div class="sectionTag">05 · Personal tracking</div>
+            <h2>Your progress doesn't stop at the desk.</h2>
+            <p>Track the personal metrics that support your routine — including gym, body weight, protein, calories and sleep.</p>
+          </div>
+          <div class="visual panel reveal">
+            <div class="stats">
+              <div class="stat"><b>84.0</b><span>Weight · kg</span></div>
+              <div class="stat"><b>82g</b><span>Protein today</span></div>
+              <div class="stat"><b>2,140</b><span>Calories</span></div>
+              <div class="stat"><b>07:18</b><span>Sleep</span></div>
+            </div>
+            <div style="margin-top:16px;color:#8b93a4;font-size:12px">MONTHLY PROGRESS</div>
+            <div class="chart">
+              <i class="bar" style="height:32%"></i><i class="bar" style="height:44%"></i><i class="bar" style="height:39%"></i><i class="bar" style="height:57%"></i><i class="bar" style="height:63%"></i><i class="bar" style="height:70%"></i><i class="bar" style="height:82%"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
+      <div class="wrap center reveal">
+        <div class="sectionTag">Simple by design</div>
+        <h2>Plan. Focus. Track. Review.</h2>
+        <p class="lead">A simple loop for turning everyday work into visible progress.</p>
+        <div class="steps">
+          <div class="step"><div class="num">01</div><h3>Plan</h3><p>Set goals, create tasks and decide what matters today.</p></div>
+          <div class="step"><div class="num">02</div><h3>Focus</h3><p>Work in focused sessions and stay with the task.</p></div>
+          <div class="step"><div class="num">03</div><h3>Track</h3><p>Record sessions, questions, tests and personal metrics.</p></div>
+          <div class="step"><div class="num">04</div><h3>Review</h3><p>Use history and statistics to understand your momentum.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap center reveal">
+        <div class="sectionTag">See your work</div>
+        <h2>Progress becomes visible.</h2>
+        <p class="lead">Your activity turns into history, trends and a clearer picture of where your time is going.</p>
+        <div class="panel" style="margin-top:42px;text-align:left">
+          <div style="display:flex;justify-content:space-between;align-items:end"><div><div style="font-size:12px;color:#858c9c">LAST 7 DAYS</div><div style="font:600 30px 'JetBrains Mono'">31:42 hrs</div></div><span style="color:#65e7c3">+18%</span></div>
+          <div class="chart" style="height:280px">
+            <i class="bar" style="height:38%"></i><i class="bar" style="height:55%"></i><i class="bar" style="height:47%"></i><i class="bar" style="height:68%"></i><i class="bar" style="height:61%"></i><i class="bar" style="height:78%"></i><i class="bar" style="height:91%"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="start">
+      <div class="wrap">
+        <div class="cta reveal">
+          <div class="sectionTag">Get started</div>
+          <h2>Ready to start tracking?</h2>
+          <p class="lead">Choose the way you want to start using Trackability today.</p>
+          <div class="buttons">
+            <a class="btn primary" id="apkLink" href="#" target="_blank" rel="noopener">Download APK</a>
+            <a class="btn secondary" id="appLink" href="#" target="_blank" rel="noopener">Open Trackability</a>
+          </div>
+          <div class="heroNote">The app experience and platform availability may change as Trackability evolves.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="center reveal"><div class="sectionTag">Questions</div><h2>Frequently asked questions.</h2></div>
+        <div class="faq reveal">
+          <details><summary>What is Trackability?<span>+</span></summary><p>Trackability is a personal progress platform designed to bring study, focus, tasks, tests and other daily tracking into one place.</p></details>
+          <details><summary>Can I use it for exams other than NEET-PG?<span>+</span></summary><p>Yes. Trackability is designed to be flexible enough for different exams and personal study systems rather than being limited to one examination.</p></details>
+          <details><summary>What can I track?<span>+</span></summary><p>Depending on the current app version, you can track study sessions, subjects and chapters, focus sessions, tasks, MCQs, tests and personal metrics such as gym, weight, nutrition and sleep.</p></details>
+          <details><summary>Is Trackability available on mobile?<span>+</span></summary><p>Trackability is being developed with mobile use in mind. Use the available Android download or the current web app experience from the Get Started section.</p></details>
+          <details><summary>Is my data synced?<span>+</span></summary><p>Account-based synchronization is part of the Trackability architecture. Availability of particular sync features depends on the current version of the application.</p></details>
+          <details><summary>How can I report a problem?<span>+</span></summary><p>Use the Support / Contact section below. Include your device, what you were doing, and what happened so the issue can be investigated more efficiently.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="feature" style="margin-top:0">
+          <div class="copy reveal">
+            <div class="sectionTag">About Trackability</div>
+            <h2>Built around one simple idea.</h2>
+            <p>Progress is easier to understand when you can see it. Trackability is being built as a flexible system for turning everyday work and habits into something you can record, review and improve.</p>
+            <p>What began around study tracking can grow into a broader personal progress platform — without losing the simplicity of knowing what to do next.</p>
+          </div>
+          <div class="visual panel reveal">
+            <div style="font:600 15px 'JetBrains Mono';color:#8e95a7">TRACKABILITY / PRINCIPLE</div>
+            <div style="font:600 42px 'Space Grotesk';line-height:1.05;margin-top:28px">Plan → Focus → Track → Review</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="support">
+      <div class="wrap">
+        <div class="cta reveal">
+          <div class="sectionTag">Support</div>
+          <h2>Need help?</h2>
+          <p class="lead">Found a bug, have a question, or want to suggest an improvement?</p>
+          <div class="buttons"><a class="btn primary" id="supportLink" href="#">Contact support →</a></div>
+          <div class="heroNote">Please include enough detail for us to understand the issue.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div><div class="brand"><span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M7 17V7m5 13V4m5 16V9" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></span>TRACKABILITY</div><p style="max-width:300px;margin-top:16px">Track your progress. Stay on track.</p></div>
+        <div><h4>Product</h4><a href="#features">Features</a><a href="#how">How it works</a><a href="#start">Get started</a></div>
+        <div><h4>Company</h4><a href="#about">About</a><a href="#support">Support</a><a href="#faq">FAQ</a></div>
+        <div><h4>Legal & social</h4><a href="privacy.html">Privacy Policy</a><a href="cookies.html">Cookie Policy</a><a href="terms.html">Terms & Conditions</a><div class="socials"><a id="insta" href="#" aria-label="Instagram">◎</a><a id="xlink" href="#" aria-label="X">𝕏</a><a id="fb" href="#" aria-label="Facebook">f</a><a id="yt" href="#" aria-label="YouTube">▶</a></div></div>
+      </div>
+      <div class="copy"><span>© 2026 Trackability. All rights reserved.</span><span>Made for people who want to see their progress.</span></div>
+    </div>
+  </footer>
+
+  <script>
+    /*
+      ============================
+      TRACKABILITY WEBSITE SETTINGS
+      ============================
+      Change ONLY these URLs when ready.
+    */
+    const CONFIG = {
+      apk: "PASTE_YOUR_APK_DOWNLOAD_LINK_HERE",
+      app: "https://bagulankit.github.io/Trackebility-0.5/",
+      supportEmail: "PASTE_YOUR_SUPPORT_EMAIL_HERE",
+      instagram: "#",
+      x: "#",
+      facebook: "#",
+      youtube: "#"
+    };
+
+    const setLink = (id, url) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (url && !url.startsWith("PASTE_") && url !== "#") el.href = url;
+      else el.href = "#";
+    };
+    setLink("apkLink", CONFIG.apk);
+    setLink("appLink", CONFIG.app);
+    setLink("insta", CONFIG.instagram);
+    setLink("xlink", CONFIG.x);
+    setLink("fb", CONFIG.facebook);
+    setLink("yt", CONFIG.youtube);
+
+    const support = document.getElementById("supportLink");
+    if (support && CONFIG.supportEmail && !CONFIG.supportEmail.startsWith("PASTE_")) {
+      support.href = "mailto:" + CONFIG.supportEmail + "?subject=Trackability%20Support";
+    } else {
+      support.href = "mailto:";
+    }
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("show"); });
+    }, {threshold:.12});
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    // Small live timer for the product showcase.
+    let seconds = 24 * 60 + 37;
+    setInterval(() => {
+      seconds = seconds > 0 ? seconds - 1 : 25 * 60;
+      const m = String(Math.floor(seconds / 60)).padStart(2,"0");
+      const s = String(seconds % 60).padStart(2,"0");
+      document.getElementById("timer").textContent = m + ":" + s;
+    }, 1000);
+  </script>
+</body>
+</html>
