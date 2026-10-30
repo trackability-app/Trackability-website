@@ -842,6 +842,7 @@
       <div class="flex p-1 bg-themeCardSoft rounded-2xl border border-themeBorder">
         <button id="sylSubBtn-syllabus" onclick="switchSyllabusSubTab('syllabus')" class="flex-1 py-1.5 text-xs font-bold rounded-xl bg-themeCard text-themeAccent shadow">Syllabus</button>
         <button id="sylSubBtn-revision" onclick="switchSyllabusSubTab('revision')" class="flex-1 py-1.5 text-xs font-bold rounded-xl text-themeMuted">Revision Hub</button>
+        <button id="sylSubBtn-spaced" onclick="switchSyllabusSubTab('spaced')" class="flex-1 py-1.5 text-xs font-bold rounded-xl text-themeMuted">Spaced Revision</button>
       </div>
 
       <div id="sylSub-syllabus" class="space-y-4">
@@ -872,37 +873,38 @@
           <div id="revisionQueueContainer" class="space-y-2"></div>
         </div>
 
-        <!-- Spaced Revision Planner -->
+      </div>
+      <div id="sylSub-spaced" class="hidden space-y-4">
         <div class="rounded-3xl p-4 bg-themeCard border border-themeBorder space-y-3">
-          <div class="flex items-center justify-between gap-2">
-            <div><h3 class="text-sm font-black text-themeText">Spaced Revision Planner</h3>
-            <p class="text-[10px] text-themeMuted mt-1">Schedule topic-wise revisions and see what is due each day.</p></div>
-            <span class="text-xl">🗓️</span>
+          <div class="flex items-center justify-between"><div><h3 class="text-sm font-black text-themeText">Spaced Revision</h3><p class="text-[10px] text-themeMuted">Plan, schedule and track topic-wise revisions.</p></div><span class="text-xl">🗓️</span></div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="rounded-xl bg-themeCardSoft p-2"><b id="spRevUpcomingCount" class="text-lg">0</b><p class="text-[9px] text-themeMuted">Upcoming</p></div>
+            <div class="rounded-xl bg-themeCardSoft p-2"><b id="spRevMissedCount" class="text-lg text-rose-400">0</b><p class="text-[9px] text-themeMuted">Missed</p></div>
+            <div class="rounded-xl bg-themeCardSoft p-2"><b id="spRevDoneCount" class="text-lg text-emerald-400">0</b><p class="text-[9px] text-themeMuted">Completed</p></div>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <input id="spRevisionSubject" class="w-full p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText" placeholder="Subject (e.g. Orthopaedics)" />
-            <input id="spRevisionTopic" class="w-full p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText" placeholder="Topic (e.g. Fractures)" />
-            <label class="text-[10px] text-themeMuted">Completed on<input id="spRevisionStart" type="date" class="block w-full mt-1 p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText" /></label>
-            <label class="text-[10px] text-themeMuted">Minutes per revision<select id="spRevisionDuration" class="block w-full mt-1 p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText"><option value="15">15 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60" selected>60 min</option><option value="90">90 min</option></select></label>
-          </div>
-          <div class="flex flex-wrap gap-3 text-[10px] text-themeMuted" id="spRevisionIntervals">
-            <label><input type="checkbox" value="1" checked> +1 day</label>
-            <label><input type="checkbox" value="7" checked> +7 days</label>
-            <label><input type="checkbox" value="21" checked> +21 days</label>
-            <label><input type="checkbox" value="45" checked> +45 days</label>
-            <label><input type="checkbox" value="60"> +60 days</label>
-          </div>
-          <button type="button" onclick="spAddRevisionPlan()" class="w-full py-3 rounded-xl bg-themeAccent text-white text-xs font-black">＋ Schedule revisions</button>
-          <div class="border-t border-themeBorder pt-3 space-y-2">
-            <div class="flex items-center justify-between"><h4 class="text-xs font-black text-themeText">Due revisions</h4><span id="spRevisionDueCount" class="text-[10px] text-themeAccent font-black">0 due</span></div>
-            <div id="spRevisionDueList" class="space-y-2"></div>
-          </div>
-          <div class="border-t border-themeBorder pt-3 space-y-2">
-            <h4 class="text-xs font-black text-themeText">All scheduled topics</h4>
-            <div id="spRevisionAllList" class="space-y-2"></div>
+          <div class="flex gap-2 flex-wrap">
+            <button onclick="switchSpacedRevisionView('create')" id="spRevView-create" class="px-3 py-2 rounded-xl bg-themeAccent text-white text-[10px] font-bold">Create plan</button>
+            <button onclick="switchSpacedRevisionView('upcoming')" id="spRevView-upcoming" class="px-3 py-2 rounded-xl bg-themeCardSoft text-themeMuted text-[10px] font-bold">Upcoming / Missed</button>
+            <button onclick="switchSpacedRevisionView('history')" id="spRevView-history" class="px-3 py-2 rounded-xl bg-themeCardSoft text-themeMuted text-[10px] font-bold">History</button>
           </div>
         </div>
+        <div id="spRevPanel-create" class="rounded-3xl p-4 bg-themeCard border border-themeBorder space-y-3">
+          <h4 class="text-xs font-black">Create revision plan</h4>
+          <label class="block text-[10px] text-themeMuted">Subject<select id="spRevisionSubjectSelect" onchange="spPopulateTopics()" class="block w-full mt-1 p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText"></select></label>
+          <label class="block text-[10px] text-themeMuted">Topic / Chapter<select id="spRevisionTopicSelect" class="block w-full mt-1 p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText"></select></label>
+          <div id="spRevisionMiscFields" class="hidden grid grid-cols-1 gap-2"><input id="spRevisionMiscSubject" class="w-full p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText" placeholder="Enter other subject" /><input id="spRevisionMiscTopic" class="w-full p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText" placeholder="Enter topic name" /></div>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="text-[10px] text-themeMuted">Completed / studied on<input id="spRevisionStart" type="date" class="block w-full mt-1 p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText" /></label>
+            <label class="text-[10px] text-themeMuted">Duration<select id="spRevisionDuration" class="block w-full mt-1 p-3 rounded-xl bg-themeCardSoft border border-themeBorder text-xs text-themeText"><option value="15">15 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60" selected>60 min</option><option value="90">90 min</option></select></label>
+          </div>
+          <div class="text-[10px] text-themeMuted">Revision intervals</div>
+          <div class="flex flex-wrap gap-3 text-[10px] text-themeMuted" id="spRevisionIntervals"><label><input type="checkbox" value="1" checked> +1 day</label><label><input type="checkbox" value="7" checked> +7 days</label><label><input type="checkbox" value="21" checked> +21 days</label><label><input type="checkbox" value="45" checked> +45 days</label><label><input type="checkbox" value="60"> +60 days</label></div>
+          <button type="button" onclick="spAddRevisionPlan()" class="w-full py-3 rounded-xl bg-themeAccent text-white text-xs font-black">＋ Generate revision schedule</button>
+        </div>
+        <div id="spRevPanel-upcoming" class="hidden space-y-3"><div class="rounded-2xl p-3 bg-themeCard border border-themeBorder"><h4 class="text-xs font-black mb-2">Upcoming revisions</h4><div id="spRevisionUpcomingList" class="space-y-2"></div></div><div class="rounded-2xl p-3 bg-themeCard border border-themeBorder"><h4 class="text-xs font-black mb-2 text-rose-400">Missed revisions</h4><div id="spRevisionMissedList" class="space-y-2"></div></div></div>
+        <div id="spRevPanel-history" class="hidden rounded-2xl p-3 bg-themeCard border border-themeBorder space-y-2"><h4 class="text-xs font-black">Revision history</h4><div id="spRevisionHistoryList" class="space-y-2"></div></div>
       </div>
+
     </section>
 
     <!-- ==================== TAB 5: TRACKER ==================== -->
@@ -3397,7 +3399,7 @@
       activeSub.chapters.forEach(ch => {
         const div = document.createElement('div');
         div.className = 'p-3 rounded-2xl bg-themeCard border border-themeBorder space-y-2';
-        div.innerHTML = `<div class="flex justify-between items-start"><div class="min-w-0 flex-1"><h5 class="text-xs font-bold text-themeText whitespace-normal break-words leading-snug">${escapeHtml(ch.name)}</h5>${ch.notes ? `<p class="text-[10px] text-themeMuted whitespace-normal break-words leading-snug mt-0.5">${escapeHtml(ch.notes)}</p>` : ''}</div><button onclick="deleteChapter('${activeSub.id}', '${ch.id}')" class="text-themeMuted hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div><div class="flex gap-1 pt-1"><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'BLANK')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'BLANK' ? 'bg-themeCardSoft text-themeText border-themeText' : 'border-themeBorder text-themeMuted'}">Left</button><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'R')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'R' ? 'bg-amber-500 text-white border-transparent' : 'border-themeBorder text-themeMuted'}">R</button><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'MCQ')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'MCQ' ? 'bg-indigo-500 text-white border-transparent' : 'border-themeBorder text-themeMuted'}">MCQ</button><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'DONE')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'DONE' ? 'bg-emerald-500 text-white border-transparent' : 'border-themeBorder text-themeMuted'}">Done ✓</button></div>`;
+        div.innerHTML = `<div class="flex justify-between items-start"><div class="min-w-0 flex-1"><h5 class="text-xs font-bold text-themeText whitespace-normal break-words leading-snug">${escapeHtml(ch.name)}</h5>${ch.notes ? `<p class="text-[10px] text-themeMuted whitespace-normal break-words leading-snug mt-0.5">${escapeHtml(ch.notes)}</p>` : ''}</div><button onclick="editChapterName('${activeSub.id}', '${ch.id}')" class="text-themeAccent p-1" title="Edit chapter"><i data-lucide="pencil" class="w-3.5 h-3.5"></i></button><button onclick="deleteChapter('${activeSub.id}', '${ch.id}')" class="text-themeMuted hover:text-rose-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button></div><div class="flex gap-1 pt-1"><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'BLANK')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'BLANK' ? 'bg-themeCardSoft text-themeText border-themeText' : 'border-themeBorder text-themeMuted'}">Left</button><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'R')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'R' ? 'bg-amber-500 text-white border-transparent' : 'border-themeBorder text-themeMuted'}">R</button><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'MCQ')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'MCQ' ? 'bg-indigo-500 text-white border-transparent' : 'border-themeBorder text-themeMuted'}">MCQ</button><button onclick="setChapterStatus('${activeSub.id}', '${ch.id}', 'DONE')" class="flex-1 py-1 rounded-lg text-[10px] font-bold border ${ch.status === 'DONE' ? 'bg-emerald-500 text-white border-transparent' : 'border-themeBorder text-themeMuted'}">Done ✓</button></div>`;
         chList.appendChild(div);
       });
       lucide.createIcons();
@@ -8490,6 +8492,110 @@ document.addEventListener('DOMContentLoaded',function(){
   });
   var priorRender=window.renderRevisionTab;
   window.renderRevisionTab=function(){if(typeof priorRender==='function')priorRender();window.spRenderRevisionPlanner();};
+})();
+</script>
+
+
+<script id="trackability-spaced-revision-v2">
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const today=()=>typeof getLocalYMD==='function'?getLocalYMD():new Date().toISOString().slice(0,10);
+const esc=v=>typeof escapeHtml==='function'?escapeHtml(String(v??'')):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function data(){appState.spacedRevisionPlans=Array.isArray(appState.spacedRevisionPlans)?appState.spacedRevisionPlans:[];return appState.spacedRevisionPlans;}
+function datePlus(d,n){let x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');}
+function subjectList(){return appState.subjects||[];}
+window.switchSyllabusSubTab=function(tab){
+ ['syllabus','revision','spaced'].forEach(k=>{let panel=$('sylSub-'+k),btn=$('sylSubBtn-'+k);if(panel)panel.classList.toggle('hidden',k!==tab);if(btn){btn.classList.toggle('bg-themeCard',k===tab);btn.classList.toggle('text-themeAccent',k===tab);btn.classList.toggle('shadow',k===tab);btn.classList.toggle('text-themeMuted',k!==tab);}});
+ if(tab==='revision'&&window.renderRevisionTab)window.renderRevisionTab();
+ if(tab==='spaced'){spPopulateSubjects();spRender();}
+};
+window.spPopulateSubjects=function(){
+ let sel=$('spRevisionSubjectSelect');if(!sel)return;
+ let old=sel.value;sel.innerHTML='<option value="">Select subject</option>'+subjectList().map(s=>'<option value="'+esc(s.id)+'">'+esc(s.name)+'</option>').join('')+'<option value="__misc">Miscellaneous / Others</option>';
+ if([...sel.options].some(o=>o.value===old))sel.value=old;
+ spPopulateTopics();
+};
+window.spPopulateTopics=function(){
+ let subId=$('spRevisionSubjectSelect')?.value,topic=$('spRevisionTopicSelect'),misc=$('spRevisionMiscFields');if(!topic)return;
+ if(misc)misc.classList.toggle('hidden',subId!=='__misc');
+ if(subId==='__misc'){topic.innerHTML='<option value="__manual">Enter topic manually</option>';topic.classList.add('hidden');}
+ else {topic.classList.remove('hidden');let sub=subjectList().find(s=>s.id===subId);topic.innerHTML='<option value="">Select chapter / topic</option>'+((sub?.chapters)||[]).map(c=>'<option value="'+esc(c.id)+'">'+esc(c.name)+'</option>').join('')+'<option value="__misc_topic">Other topic (enter manually)</option>';}
+};
+window.switchSpacedRevisionView=function(v){
+ ['create','upcoming','history'].forEach(k=>{let p=$('spRevPanel-'+k),b=$('spRevView-'+k);if(p)p.classList.toggle('hidden',k!==v);if(b){b.classList.toggle('bg-themeAccent',k===v);b.classList.toggle('text-white',k===v);b.classList.toggle('bg-themeCardSoft',k!==v);b.classList.toggle('text-themeMuted',k!==v);}});
+ spRender();
+};
+function classify(){
+ let now=today(),plans=data(),missed=[],upcoming=[],done=[],changed=false;
+ plans.forEach(p=>(p.sessions||[]).forEach(x=>{
+  if(x.status==='done')done.push({p,x});
+  else if(x.date<now){if(x.status!=='missed'){x.status='missed';changed=true;}missed.push({p,x});}
+  else upcoming.push({p,x});
+ }));
+ if(changed)saveState();
+ return {missed,upcoming,done};
+}
+window.spAddRevisionPlan=function(){
+ let sid=$('spRevisionSubjectSelect')?.value,tid=$('spRevisionTopicSelect')?.value;
+ if(!sid){showToast('Select a subject first','alert-circle');return;}
+ let subName='',topicName='',subjectId='',chapterId='';
+ if(sid==='__misc'){subName=$('spRevisionMiscSubject')?.value.trim();topicName=$('spRevisionMiscTopic')?.value.trim();if(!subName||!topicName){showToast('Enter subject and topic','alert-circle');return;}}
+ else {let sub=subjectList().find(s=>s.id===sid);if(!sub){showToast('Subject not found','alert-circle');return;}subName=sub.name;subjectId=sub.id;
+  if(tid==='__misc_topic'){topicName=prompt('Enter topic name:','');if(!topicName?.trim())return;topicName=topicName.trim();}
+  else {let ch=(sub.chapters||[]).find(c=>c.id===tid);if(!ch){showToast('Select a topic','alert-circle');return;}topicName=ch.name;chapterId=ch.id;}
+ }
+ let start=$('spRevisionStart')?.value||today(),duration=Number($('spRevisionDuration')?.value||60),intervals=[...document.querySelectorAll('#spRevisionIntervals input:checked')].map(x=>Number(x.value)).filter(n=>n>0);
+ if(!intervals.length){showToast('Select at least one revision interval','alert-circle');return;}
+ let id='spr_'+Date.now();
+ data().push({id,subject:subName,topic:topicName,subjectId,chapterId,duration,createdDate:today(),sessions:intervals.map((n,i)=>({id:id+'_r'+i,date:datePlus(start,n),interval:n,status:'scheduled',taskId:null,completedAt:null}))});
+ saveState();$('spRevisionStart').value='';showToast('Revision schedule generated');switchSpacedRevisionView('upcoming');
+};
+function card(p,x,status){
+ let label=status==='missed'?'Missed':status==='done'?'Completed':'Upcoming';
+ let color=status==='missed'?'border-rose-500 bg-rose-500/10':status==='done'?'border-emerald-500 bg-emerald-500/10':'border-themeBorder bg-themeCard';
+ let add=x.taskId?'<span class="text-[9px] text-emerald-400 font-bold">Added to Tasks</span>':'<button onclick="spAddToTask(\''+esc(p.id)+'\',\''+esc(x.id)+'\')" class="px-2.5 py-1.5 rounded-lg bg-themeAccent text-white text-[9px] font-bold">＋ Add to Task</button>';
+ let done=status==='missed'?'<button onclick="spMarkDone(\''+esc(p.id)+'\',\''+esc(x.id)+'\')" class="px-2.5 py-1.5 rounded-lg bg-emerald-600 text-white text-[9px] font-bold">Mark Done</button>':'';
+ return '<div class="p-3 rounded-xl border '+color+' flex items-start justify-between gap-2"><div class="min-w-0"><div class="text-[9px] font-black uppercase text-themeMuted">'+esc(p.subject)+'</div><div class="text-xs font-bold text-themeText">'+esc(p.topic)+'</div><div class="text-[9px] text-themeMuted mt-1">'+esc(x.date)+' · '+p.duration+' min · '+label+(x.completedAt?' · Done '+esc(x.completedAt):'')+'</div></div><div class="flex flex-col items-end gap-1 shrink-0">'+add+done+'</div></div>';
+}
+window.spAddToTask=function(pid,sid){
+ let p=data().find(z=>z.id===pid),x=p?.sessions.find(z=>z.id===sid);if(!p||!x||x.taskId)return;
+ appState.tasks=appState.tasks||[];
+ let taskId='tsk_sp_'+Date.now();
+ appState.tasks.push({id:taskId,name:'Revision: '+p.subject+' – '+p.topic,date:x.date,color:'#6366f1',startTime:null,endTime:null,duration:p.duration,completed:false,reminderEnabled:false,reminderPreset:'none',subjectId:p.subjectId||'',chapterId:p.chapterId||'',trackerType:'standard',mcqType:'',trackerLogged:false,mcqTaskCount:0,revisionSessionId:x.id});
+ x.taskId=taskId;saveState();if(typeof refreshAllViews==='function')refreshAllViews();spRender();showToast('Revision added to Tasks');
+};
+window.spMarkDone=function(pid,sid){
+ let p=data().find(z=>z.id===pid),x=p?.sessions.find(z=>z.id===sid);if(!x)return;
+ x.status='done';x.completedAt=today();
+ let task=(appState.tasks||[]).find(t=>t.id===x.taskId);if(task)task.completed=true;
+ saveState();if(typeof refreshAllViews==='function')refreshAllViews();spRender();showToast('Revision marked completed');
+};
+function spRender(){
+ let c=classify(),up=$('spRevisionUpcomingList'),mi=$('spRevisionMissedList'),hi=$('spRevisionHistoryList');
+ if(up)up.innerHTML=c.upcoming.length?c.upcoming.sort((a,b)=>a.x.date.localeCompare(b.x.date)).map(a=>card(a.p,a.x,'upcoming')).join(''):'<p class="text-[10px] text-themeMuted">No upcoming revisions.</p>';
+ if(mi)mi.innerHTML=c.missed.length?c.missed.sort((a,b)=>a.x.date.localeCompare(b.x.date)).map(a=>card(a.p,a.x,'missed')).join(''):'<p class="text-[10px] text-themeMuted">No missed revisions. Great work! 🎉</p>';
+ if(hi){let hist=c.done.sort((a,b)=>(b.x.completedAt||'').localeCompare(a.x.completedAt||''));hi.innerHTML=hist.length?hist.map(a=>card(a.p,a.x,'done')).join(''):'<p class="text-[10px] text-themeMuted">Completed revisions will appear here.</p>';}
+ [['spRevUpcomingCount',c.upcoming.length],['spRevMissedCount',c.missed.length],['spRevDoneCount',c.done.length]].forEach(([id,n])=>{if($(id))$(id).textContent=n;});
+}
+window.editChapterName=function(subId,chId){
+ let sub=(appState.subjects||[]).find(s=>s.id===subId),ch=sub?.chapters?.find(c=>c.id===chId);if(!ch)return;
+ let next=prompt('Edit chapter name:',ch.name||'');if(next===null)return;next=next.trim();if(!next){showToast('Chapter name cannot be empty','alert-circle');return;}
+ ch.name=next;saveState();renderSyllabus();if(typeof renderHomeSyllabusCard==='function')renderHomeSyllabusCard();spPopulateSubjects();showToast('Chapter updated');
+};
+// If a revision task is completed from the normal Task menu, mirror it into revision history.
+let baseToggle=window.toggleTaskDone;
+if(typeof baseToggle==='function')window.toggleTaskDone=function(id){
+ baseToggle(id);
+ let task=(appState.tasks||[]).find(t=>t.id===id);
+ if(task?.revisionSessionId){data().forEach(p=>(p.sessions||[]).forEach(x=>{if(x.id===task.revisionSessionId){x.status=task.completed?'done':'scheduled';x.completedAt=task.completed?today():null;}}));saveState();spRender();}
+};
+function refreshSpaced(){if($('spRevisionSubjectSelect'))spPopulateSubjects();if($('sylSub-spaced')&&!$('sylSub-spaced').classList.contains('hidden'))spRender();}
+document.addEventListener('DOMContentLoaded',function(){
+ if(!$('spRevisionStart'))return;
+ $('spRevisionStart').value=today();spPopulateSubjects();spRender();
+ setInterval(function(){if(document.visibilityState!=='hidden')spRender();},60000);
+});
 })();
 </script>
 
